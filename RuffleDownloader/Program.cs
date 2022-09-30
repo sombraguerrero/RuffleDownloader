@@ -1,9 +1,17 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 using System.IO.Compression;
+using System.Text;
+
 string filePath = @"D:\users\rsett\Downloads\ruffle_desktop.zip";
 Task<byte[]> getRuffle = GetRuffle();
 getRuffle.Wait();
+byte[] stageResults = getRuffle.Result;
+if (stageResults.Length  <= 1024)
+{
+    filePath = @"D:\users\rsett\Downloads\download_error.log";
+}
+
 File.WriteAllBytes(filePath, getRuffle.Result);
 if (File.Exists(filePath))
 {
@@ -24,7 +32,7 @@ static async Task<byte[]> GetRuffle()
         {
             return await response.Content.ReadAsByteArrayAsync();
         }
-        else
+        else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
         {
             bool success = false;
             while (!success)
@@ -46,5 +54,5 @@ static async Task<byte[]> GetRuffle()
     {
         Console.Error.WriteLine(ex.Message);
     }
-    return new byte[0];
+    return Encoding.UTF8.GetBytes("The release server appears to be in error!");
 }
