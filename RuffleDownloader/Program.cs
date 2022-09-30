@@ -12,7 +12,7 @@ if (stageResults.Length  <= 1024)
     filePath = @"D:\users\rsett\Downloads\download_error.log";
 }
 
-File.WriteAllBytes(filePath, getRuffle.Result);
+File.WriteAllBytes(filePath, stageResults);
 if (File.Exists(filePath))
 {
     ZipFile.ExtractToDirectory(filePath, @"D:\run\ruffle", true);
