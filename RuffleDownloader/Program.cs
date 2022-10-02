@@ -30,6 +30,7 @@ static async Task<byte[]> GetRuffle()
     {
         if (response.StatusCode == System.Net.HttpStatusCode.OK)
         {
+            File.WriteAllText("latest.txt", "Success on " + targetdir);
             return await response.Content.ReadAsByteArrayAsync();
         }
         else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
@@ -44,7 +45,7 @@ static async Task<byte[]> GetRuffle()
                 if (response.StatusCode == System.Net.HttpStatusCode.OK)
                 {
                     success = true;
-                    Console.WriteLine("Success on " + targetdir);
+                    File.WriteAllText("latest.txt","Success on " + targetdir);
                     return await response.Content.ReadAsByteArrayAsync();
                 }
             }
@@ -52,7 +53,7 @@ static async Task<byte[]> GetRuffle()
     }
     catch (HttpRequestException ex)
     {
-        Console.Error.WriteLine(ex.Message);
+        File.WriteAllText("error.txt", ex.Message);
     }
     return Encoding.UTF8.GetBytes("The release server appears to be in error!");
 }
